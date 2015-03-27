@@ -147,15 +147,18 @@
             return false;
 
         var options = {
-            method : configs.method || "GET",
-            async : configs.async || true,
-            data : configs.data || null,
-            beforeSend : configs.beforeSend || false,
-            onSuccess : configs.onSuccess || false,
-            onFailure : configs.onFailure || false,
-            onComplete : configs.onComplete || false,
-            json : configs.json || false
-        };
+                method : configs.method || "GET",
+                async : configs.async || true,
+                data : configs.data || null,
+                beforeSend : configs.beforeSend || false,
+                onSuccess : configs.onSuccess || false,
+                onFailure : configs.onFailure || false,
+                onComplete : configs.onComplete || false,
+                json : configs.json || false,
+                user : configs.user || false,
+                pass : configs.pass || false
+            },
+            methods = /^(get|post|head|put|delete|options)$/i;
 
         if(typeof options.beforeSend === "function")
             options.beforeSend();
@@ -179,7 +182,11 @@
             }
         };
 
-        request.open(options.method, action, options.async);
+        if(!!options.user && !!options.pass)
+            request.open(options.method, action, options.async, options.user, options.pass);
+        else
+            request.open(options.method, action, options.async);
+
         request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
         if(!!options.json)
