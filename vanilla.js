@@ -193,6 +193,24 @@
         return request;
     };
 
+    Vanilla.serialize = function(form){
+            if(form.tagName.toLowerCase() !== "form")
+                return false;
+
+            var data = [];
+            for(var i = 0; i < form.elements.length; i++){
+                if(typeof form.elements[i].type !== "undefined" &&
+                    (form.elements[i].type.toLowerCase() === "submit" ||
+                    form.elements[i].type.toLowerCase() === "reset"))
+                    continue;
+                else
+                    data.push((form.elements[i].name + '=' + encodeURIComponent(form.elements[i].value)));
+                console.log(form.elements[i].name + ': ' + form.elements[i].value);
+            }
+
+            return data.join('&');
+        };
+
     if (typeof module !== 'undefined' && module.exports) {
         module.exports = Vanilla;
     } else {
