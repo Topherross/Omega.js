@@ -102,6 +102,16 @@
         return false;
     };
 
+    Vanilla.toggleClass = function (obj, klass) {
+        if (Vanilla.hasClass(obj, klass)) {
+            Vanilla.removeClass(obj, klass);
+        }else{
+           Vanilla.addClass(obj, klass);
+        }
+
+        return false;
+    };
+
     Vanilla.batchRemoveClass = function (objs, klass) {
         for (var obj in objs) {
             if (Object.prototype.hasOwnProperty.call(objs, obj) && obj != 'length' && obj != 'item' && objs[obj].hasAttribute('class'))
@@ -146,11 +156,71 @@
         return (document.all) ? el.innerText : el.textContent;
     };
 
+    Vanilla.getUrlParams = function(){
+        var params = {},
+            search = window.location.search;
+
+        if(!!(/^\?/.test(search))){
+            var param_array = search.split('?')[1].split('&');
+
+            for(var i = 0; i < param_array.length; i++){
+                var _params = param_array[i].split('=');
+                params[_params[0]] = _params[1];
+            }
+        }
+
+        return params;
+    };
+
+    Vanilla.stringifyUrlParams = function(obj){
+        var params = [];
+
+        for(var key in obj){
+            if(Object.prototype.hasOwnProperty.call(obj, key) && key !== 'length')
+                params.push(encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]));
+        }
+
+        return params.join('&');
+    };
+
+    Vanilla.setUrlParam = function(param, value, allow_reload){
+        var params = Vanilla.getUrlParams();
+
+        params[param] = value;
+
+        if(window.history.pushState)
+            window.history.pushState({}, "", window.location.pathname + '?' + Vanilla.stringifyUrlParams(params));
+        else if(typeof allow_reload !== "undefined" && !!allow_reload)
+            window.location.search = Vanilla.stringifyUrlParams(params);
+
+        return params;
+    };
+
+    Vanilla.removeUrlParam = function(param, allow_reload){
+        var params = Vanilla.getUrlParams(),
+            param_string;
+
+        if(Object.prototype.hasOwnProperty.call(params, param))
+            delete params[param];
+
+        param_string = Vanilla.stringifyUrlParams(params);
+
+        if(window.history.pushState && param_string === "")
+            window.history.pushState({}, "", window.location.pathname);
+        else if(window.history.pushState && param_string !== "")
+            window.history.pushState({}, "", window.location.pathname + '?' + param_string);
+        else if(typeof allow_reload !== "undefined" && !!allow_reload)
+            window.location.search = param_string;
+
+        return params;
+    };
+
     Vanilla.ajax = function (action, configs) {
         if (typeof action === "undefined" || action === null || !action)
             return false;
 
-        var options = {
+        var methods = /^(get|post|head|put|delete|options)$/i,
+            options = {
                 method: configs.method || "GET",
                 async: configs.async || true,
                 data: configs.data || null,
@@ -161,8 +231,10 @@
                 json: configs.json || false,
                 user: configs.user || false,
                 pass: configs.pass || false
-            },
-            methods = /^(get|post|head|put|delete|options)$/i;
+            };
+
+        if(!methods.test(options.method))
+            options.method = "GET";
 
         if (typeof options.beforeSend === "function")
             options.beforeSend();
