@@ -52,6 +52,44 @@
             clear:none;
             padding:4px 0 10px 10px;
         }
+
+        #vanilla_modal_wrap{
+            background:rgba(255,255,255,0.6);
+            width:100%;height:100%;
+            position:fixed;
+            top:0;
+            left:0;
+        }
+
+        #vanilla_modal_wrap *{
+            box-sizing:border-box;
+        }
+
+        #vanilla_modal_window{
+            position:absolute;
+            width:400px;height:260px;
+            background:rgb(255,255,255);
+            border:rgb(120,120,120) 2px solid;
+            top:40%;
+            left:50%;
+            margin:-130px 0 0 -200px;
+        }
+
+        #vanilla_modal_header{
+            margin:0 50px 0 0;
+        }
+
+        #vanilla_modal_closer{
+            position:absolute;
+            top:0;
+            right:0;
+            width:40px;
+            height:40px;
+        }
+
+        #vanilla_modal_content{
+
+        }
     </style>
 </head>
 <body>
@@ -131,6 +169,8 @@
                 event.preventDefault();
 
                 console.log(Vanilla.serialize(document.querySelector('form')));
+
+                Vanilla.modal().updateHeader('Fuck Yeah!').show();
             }, false);
 
             console.log(urlParams);

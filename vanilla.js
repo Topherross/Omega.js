@@ -4,7 +4,8 @@
 (function () {
     'use strict';
 
-    var Vanilla = {};
+    var Vanilla = {},
+        $modal = null;
 
     Vanilla.ready = function (callback) {
         if (document.readyState === "complete") {
@@ -213,6 +214,72 @@
             window.location.search = param_string;
 
         return params;
+    };
+
+    Vanilla.modal = function(){
+        if ($modal !== null)
+            return $modal;
+
+        $modal = {};
+
+        var modal_wrap = Vanilla.createEl('div', {'id' : 'vanilla_modal_wrap', 'style' : 'display:none;'}),
+            modal_window = Vanilla.createEl('div', {'id' : 'vanilla_modal_window'}),
+            modal_header = Vanilla.createEl('h1', {'id' : 'vanilla_modal_header'}),
+            modal_closer = Vanilla.createEl('div', {'id' : 'vanilla_modal_closer'}),
+            modal_content = Vanilla.createEl('div', {'id' : 'vanilla_modal_content'});
+
+        modal_window.appendChild(modal_header);
+        modal_window.appendChild(modal_closer);
+        modal_window.appendChild(modal_content);
+        modal_wrap.appendChild(modal_window);
+
+        $modal.addedToDOM = false;
+
+        $modal.updateHeader = function(text, html){
+            if(typeof html !== "undefined" && !!html)
+                Vanilla.setText(modal_header, text, html);
+            else
+                Vanilla.setText(modal_header, text);
+
+            return $modal;
+        };
+
+        $modal.updateContent = function(text, html){
+            if(typeof html !== "undefined" && !!html)
+                Vanilla.setText(modal_content, text, html);
+            else
+                Vanilla.setText(modal_content, text);
+
+            return $modal;
+        };
+
+        $modal.show = function(){
+            if(!$modal.addedToDOM){
+                document.body.appendChild(modal_wrap);
+                $modal.addedToDOM = true;
+            }
+
+            Object(modal_wrap).style.display = "block";
+
+            return $modal;
+        };
+
+        $modal.hide = function(){
+            if(!!$modal.addedToDOM)
+                Object(modal_wrap).style.display = "none";
+
+            return $modal;
+        };
+
+        $modal.destroy = function(){
+            document.body.removeChild(modal_wrap);
+            $modal = null;
+        };
+
+        document.body.appendChild(modal_wrap);
+        $modal.addedToDOM = true;
+
+        return $modal;
     };
 
     Vanilla.ajax = function (action, configs) {
