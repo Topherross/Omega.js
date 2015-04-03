@@ -70,7 +70,7 @@
             width:400px;height:260px;
             background:rgb(255,255,255);
             border:rgb(120,120,120) 2px solid;
-            top:40%;
+            top:30%;
             left:50%;
             margin:-130px 0 0 -200px;
         }
@@ -83,8 +83,17 @@
             position:absolute;
             top:0;
             right:0;
-            width:40px;
-            height:40px;
+            width:20px;
+            height:20px;
+        }
+
+        #vanilla_modal_closer:after{
+            content:'X';
+            text-align:center;
+            font-family:"Arial Black", sans-serif;
+            font-size:16px;
+            text-transform:uppercase;
+            font-weight:600;
         }
 
         #vanilla_modal_content{
@@ -170,7 +179,10 @@
 
                 console.log(Vanilla.serialize(document.querySelector('form')));
 
-                Vanilla.modal().updateHeader('Fuck Yeah!').show();
+                Vanilla.modal().
+                        updateHeader('Fuck Yeah!').
+                        updateContent('<h2>Get me out of here!</h2><p>Please god. the portal opened in my living room, and I got sucked in.</p>', true).
+                        show();
             }, false);
 
             console.log(urlParams);

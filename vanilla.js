@@ -4,6 +4,15 @@
 (function () {
     'use strict';
 
+    // Fallback for IE 8
+    if (!Array.prototype.forEach) {
+        Array.prototype.forEach = function (fn, scope) {
+            for (var i = 0, len = this.length; i < len; ++i) {
+                fn.call(scope || this, this[i], i, this);
+            }
+        }
+    }
+
     var Vanilla = {},
         $modal = null;
 
@@ -38,6 +47,8 @@
                 }
             }
         }
+
+        return false;
     };
 
     Vanilla.createEl = function (type, attrs, text, html) {
@@ -104,11 +115,10 @@
     };
 
     Vanilla.toggleClass = function (obj, klass) {
-        if (Vanilla.hasClass(obj, klass)) {
+        if (Vanilla.hasClass(obj, klass))
             Vanilla.removeClass(obj, klass);
-        }else{
+        else
            Vanilla.addClass(obj, klass);
-        }
 
         return false;
     };
@@ -118,21 +128,50 @@
             if (Object.prototype.hasOwnProperty.call(objs, obj) && obj != 'length' && obj != 'item' && objs[obj].hasAttribute('class'))
                 Vanilla.removeClass(objs[obj], klass);
         }
+
         return false;
     };
 
     Vanilla.event = function (el, event, func, bubbles) {
         var _bubbles = (typeof bubbles !== "undefined" && (!!bubbles || !bubbles)) ? bubbles : false;
 
-        if (document.addEventListener) {
+        if (document.addEventListener)
             el.addEventListener(event, function (e) {
                 func(e);
             }, _bubbles);
-        } else {
+        else if(document.attachEvent)
             el.attachEvent("on" + event, function (e) {
                 func(e)
             });
-        }
+        else
+            el["on" + event] = null;
+
+        return false;
+    };
+
+    Vanilla.remove = function (el, event, func, bubbles) {
+        var _bubbles = (typeof bubbles !== "undefined" && (!!bubbles || !bubbles)) ? bubbles : false;
+
+        if (document.removeEventListener)
+            el.removeEventListener(event, function (e) {
+                func(e);
+            }, _bubbles);
+        else if(document.detachEvent)
+            el.detachEvent("on" + event, function (e) {
+                func(e)
+            });
+        else
+            el["on" + event] = null;
+
+        return false;
+    };
+
+    Vanilla.on = function (els, event, func, bubbles) {
+        [].forEach.call(els, function(el){
+            Vanilla.event(el, event, func, bubbles);
+        });
+
+        return false;
     };
 
     Vanilla.stop = function (event) {
@@ -140,6 +179,8 @@
             event.stopPropagation();
         else
             event.cancelBubble = true;
+
+        return false;
     };
 
     Vanilla.setText = function (el, text, html) {
@@ -276,6 +317,10 @@
             $modal = null;
         };
 
+        Vanilla.event(modal_closer, 'click', function(){
+            $modal.hide();
+        }, false);
+
         document.body.appendChild(modal_wrap);
         $modal.addedToDOM = true;
 
@@ -347,56 +392,29 @@
         if (form.tagName.toLowerCase() !== "form")
             return false;
 
-        var data_object = {},
-            data = [];
+        var data = [];
 
         for (var i = 0; i < form.elements.length; i++) {
             var type = form.elements[i].type.toLowerCase();
 
-            if(typeof form.elements[i].type === "undefined" ||
+            if (typeof form.elements[i].type === "undefined" ||
                 (type === "submit" || type === "reset" || type === "button"))
                 continue;
 
             if ((type === "radio" || type === "checkbox")) {
-                if(!form.elements[i].checked)
+                if (!form.elements[i].checked)
                     continue;
 
-                if(Object.prototype.hasOwnProperty.call(data_object, form.elements[i].name)){
-                    if(!(data_object[form.elements[i].name] instanceof Array)){
-                        var curr_value = data_object[form.elements[i].name];
-                        data_object[form.elements[i].name] = [];
-                        data_object[form.elements[i].name].push(curr_value);
-                    }
-                    data_object[form.elements[i].name].push(encodeURIComponent(form.elements[i].value));
-                }else{
-                   data_object[form.elements[i].name] = encodeURIComponent(form.elements[i].value);
+                data.push((form.elements[i].name + '=' + encodeURIComponent(form.elements[i].value)));
+            } else if (type === "select-multiple") {
+                for (var selection = 0; selection < form.elements[i].children.length; selection++) {
+                    if (form.elements[i].children[selection].selected)
+                        data.push((form.elements[i].name + '=' + encodeURIComponent(form.elements[i].children[selection].value)));
                 }
-            }else if (type === "select-multiple") {
-                data_object[form.elements[i].name] = [];
-                for(var selection = 0; selection < form.elements[i].children.length; selection++){
-                    if(form.elements[i].children[selection].selected)
-                        data_object[form.elements[i].name].push(encodeURIComponent(form.elements[i].children[selection].value));
-                }
-            }else{
-                if(form.elements[i].value == "")
-                    continue;
-
-                data_object[form.elements[i].name] = encodeURIComponent(form.elements[i].value);
+            } else {
+                data.push((form.elements[i].name + '=' + encodeURIComponent(form.elements[i].value)));
             }
         }
-
-        for(var el in data_object){
-            if(Object.prototype.hasOwnProperty.call(data_object, el) && el !== 'length'){
-                if(!!(data_object[el] instanceof Array)){
-                    for(var index = 0; index < data_object[el].length; index++){
-                        data.push((el + '[' + index + ']=' + data_object[el][index]));
-                    }
-                }else{
-                    data.push((el + '=' + data_object[el]));
-                }
-            }
-        }
-
         return data.join('&');
     };
 
