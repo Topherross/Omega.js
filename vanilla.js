@@ -76,6 +76,9 @@
     };
 
     Vanilla.hasClass = function (obj, klass) {
+        if(!obj.hasAttribute('class'))
+            return false;
+
         var class_list = obj.getAttribute('class').split(' ');
 
         if (typeof class_list !== "undefined") {
@@ -90,6 +93,9 @@
     };
 
     Vanilla.removeClass = function (obj, klass) {
+        if(!obj.hasAttribute('class'))
+            return false;
+
         var class_list = obj.getAttribute('class').split(' ');
 
         for (var class_name in class_list) {
@@ -104,7 +110,7 @@
     };
 
     Vanilla.addClass = function (obj, klass) {
-        var class_list = obj.getAttribute('class').split(' ');
+        var class_list = (obj.hasAttribute('class'))? obj.getAttribute('class').split(' ') : [];
 
         if (!Vanilla.hasClass(obj, klass)) {
             class_list.push(klass);
@@ -125,7 +131,10 @@
 
     Vanilla.batchRemoveClass = function (objs, klass) {
         for (var obj in objs) {
-            if (Object.prototype.hasOwnProperty.call(objs, obj) && obj != 'length' && obj != 'item' && objs[obj].hasAttribute('class'))
+            if (Object.prototype.hasOwnProperty.call(objs, obj) &&
+                obj != 'length' &&
+                obj != 'item' &&
+                objs[obj].hasAttribute('class'))
                 Vanilla.removeClass(objs[obj], klass);
         }
 
