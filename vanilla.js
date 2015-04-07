@@ -4,15 +4,6 @@
 (function () {
     'use strict';
 
-    // Fallback for IE 8
-    if (!Array.prototype.forEach) {
-        Array.prototype.forEach = function (fn, scope) {
-            for (var i = 0, len = this.length; i < len; ++i) {
-                fn.call(scope || this, this[i], i, this);
-            }
-        }
-    }
-
     var Vanilla = {},
         $modal = null;
 
@@ -175,14 +166,6 @@
         return false;
     };
 
-    Vanilla.on = function (els, event, func, bubbles) {
-        [].forEach.call(els, function(el){
-            Vanilla.event(el, event, func, bubbles);
-        });
-
-        return false;
-    };
-
     Vanilla.stop = function (event) {
         if (event.stopPropagation)
             event.stopPropagation();
@@ -266,13 +249,18 @@
         return params;
     };
 
-    Vanilla.modal = function(){
+    Vanilla.modal = function(options){
         if ($modal !== null)
             return $modal;
 
         $modal = {};
 
-        var modal_wrap = Vanilla.createEl('div', {'id' : 'vanilla_modal_wrap', 'style' : 'display:none;'}),
+        var _options = (typeof options === "undefined")? {} : options,
+            configs = {
+                showCallback : _options.showCallback || false,
+                hideCallback : _options.hideCallback || false
+            },
+            modal_wrap = Vanilla.createEl('div', {'id' : 'vanilla_modal_wrap', 'style' : 'display:none;'}),
             modal_window = Vanilla.createEl('div', {'id' : 'vanilla_modal_window'}),
             modal_header = Vanilla.createEl('h1', {'id' : 'vanilla_modal_header'}),
             modal_closer = Vanilla.createEl('div', {'id' : 'vanilla_modal_closer'}),
@@ -284,6 +272,7 @@
         modal_wrap.appendChild(modal_window);
 
         $modal.addedToDOM = false;
+        $modal.visible = false;
 
         $modal.updateHeader = function(text, html){
             if(typeof html !== "undefined" && !!html)
@@ -310,13 +299,22 @@
             }
 
             Object(modal_wrap).style.display = "block";
+            $modal.visible = true;
+
+            if(typeof configs.showCallback === "function")
+                configs.showCallback();
 
             return $modal;
         };
 
         $modal.hide = function(){
-            if(!!$modal.addedToDOM)
+            if(!!$modal.addedToDOM){
                 Object(modal_wrap).style.display = "none";
+                $modal.visible = false;
+            }
+
+            if(typeof configs.hideCallback === "function")
+                configs.hideCallback();
 
             return $modal;
         };
