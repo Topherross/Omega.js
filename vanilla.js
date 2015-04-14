@@ -67,7 +67,7 @@
     };
 
     Vanilla.hasClass = function (obj, klass) {
-        if(!obj.hasAttribute('class'))
+        if (!obj.hasAttribute('class'))
             return false;
 
         var class_list = obj.getAttribute('class').split(' ');
@@ -84,7 +84,7 @@
     };
 
     Vanilla.removeClass = function (obj, klass) {
-        if(!obj.hasAttribute('class'))
+        if (!obj.hasAttribute('class'))
             return false;
 
         var class_list = obj.getAttribute('class').split(' ');
@@ -101,7 +101,7 @@
     };
 
     Vanilla.addClass = function (obj, klass) {
-        var class_list = (obj.hasAttribute('class'))? obj.getAttribute('class').split(' ') : [];
+        var class_list = (obj.hasAttribute('class')) ? obj.getAttribute('class').split(' ') : [];
 
         if (!Vanilla.hasClass(obj, klass)) {
             class_list.push(klass);
@@ -115,7 +115,7 @@
         if (Vanilla.hasClass(obj, klass))
             Vanilla.removeClass(obj, klass);
         else
-           Vanilla.addClass(obj, klass);
+            Vanilla.addClass(obj, klass);
 
         return false;
     };
@@ -139,7 +139,7 @@
             el.addEventListener(event, function (e) {
                 func(e);
             }, _bubbles);
-        else if(document.attachEvent)
+        else if (document.attachEvent)
             el.attachEvent("on" + event, function (e) {
                 func(e)
             });
@@ -156,7 +156,7 @@
             el.removeEventListener(event, function (e) {
                 func(e);
             }, _bubbles);
-        else if(document.detachEvent)
+        else if (document.detachEvent)
             el.detachEvent("on" + event, function (e) {
                 func(e)
             });
@@ -190,14 +190,14 @@
         return (document.all) ? el.innerText : el.textContent;
     };
 
-    Vanilla.getUrlParams = function(){
+    Vanilla.getUrlParams = function () {
         var params = {},
             search = window.location.search;
 
-        if(!!(/^\?/.test(search))){
+        if (!!(/^\?/.test(search))) {
             var param_array = search.split('?')[1].split('&');
 
-            for(var i = 0; i < param_array.length; i++){
+            for (var i = 0; i < param_array.length; i++) {
                 var _params = param_array[i].split('=');
                 params[_params[0]] = _params[1];
             }
@@ -206,65 +206,65 @@
         return params;
     };
 
-    Vanilla.stringifyUrlParams = function(obj){
+    Vanilla.stringifyUrlParams = function (obj) {
         var params = [];
 
-        for(var key in obj){
-            if(Object.prototype.hasOwnProperty.call(obj, key) && key !== 'length')
+        for (var key in obj) {
+            if (Object.prototype.hasOwnProperty.call(obj, key) && key !== 'length')
                 params.push(encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]));
         }
 
         return params.join('&');
     };
 
-    Vanilla.setUrlParam = function(param, value, allow_reload){
+    Vanilla.setUrlParam = function (param, value, allow_reload) {
         var params = Vanilla.getUrlParams();
 
         params[param] = value;
 
-        if(window.history.pushState)
+        if (window.history.pushState)
             window.history.pushState({}, "", window.location.pathname + '?' + Vanilla.stringifyUrlParams(params));
-        else if(typeof allow_reload !== "undefined" && !!allow_reload)
+        else if (typeof allow_reload !== "undefined" && !!allow_reload)
             window.location.search = Vanilla.stringifyUrlParams(params);
 
         return params;
     };
 
-    Vanilla.removeUrlParam = function(param, allow_reload){
+    Vanilla.removeUrlParam = function (param, allow_reload) {
         var params = Vanilla.getUrlParams(),
             param_string;
 
-        if(Object.prototype.hasOwnProperty.call(params, param))
+        if (Object.prototype.hasOwnProperty.call(params, param))
             delete params[param];
 
         param_string = Vanilla.stringifyUrlParams(params);
 
-        if(window.history.pushState && param_string === "")
+        if (window.history.pushState && param_string === "")
             window.history.pushState({}, "", window.location.pathname);
-        else if(window.history.pushState && param_string !== "")
+        else if (window.history.pushState && param_string !== "")
             window.history.pushState({}, "", window.location.pathname + '?' + param_string);
-        else if(typeof allow_reload !== "undefined" && !!allow_reload)
+        else if (typeof allow_reload !== "undefined" && !!allow_reload)
             window.location.search = param_string;
 
         return params;
     };
 
-    Vanilla.modal = function(options){
+    Vanilla.modal = function (options) {
         if ($modal !== null)
             return $modal;
 
         $modal = {};
+        options = (typeof options === "undefined") ? {} : options;
 
-        var _options = (typeof options === "undefined")? {} : options,
-            configs = {
-                showCallback : _options.showCallback || false,
-                hideCallback : _options.hideCallback || false
+        var configs = {
+                showCallback: options.showCallback || false,
+                hideCallback: options.hideCallback || false
             },
-            modal_wrap = Vanilla.createEl('div', {'id' : 'vanilla_modal_wrap', 'style' : 'display:none;'}),
-            modal_window = Vanilla.createEl('div', {'id' : 'vanilla_modal_window'}),
-            modal_header = Vanilla.createEl('h1', {'id' : 'vanilla_modal_header'}),
-            modal_closer = Vanilla.createEl('div', {'id' : 'vanilla_modal_closer'}),
-            modal_content = Vanilla.createEl('div', {'id' : 'vanilla_modal_content'});
+            modal_wrap = Vanilla.createEl('div', {'id': 'vanilla_modal_wrap', 'style': 'display:none;'}),
+            modal_window = Vanilla.createEl('div', {'id': 'vanilla_modal_window'}),
+            modal_header = Vanilla.createEl('h1', {'id': 'vanilla_modal_header'}),
+            modal_closer = Vanilla.createEl('div', {'id': 'vanilla_modal_closer'}),
+            modal_content = Vanilla.createEl('div', {'id': 'vanilla_modal_content'});
 
         modal_window.appendChild(modal_header);
         modal_window.appendChild(modal_closer);
@@ -274,8 +274,8 @@
         $modal.addedToDOM = false;
         $modal.visible = false;
 
-        $modal.updateHeader = function(text, html){
-            if(typeof html !== "undefined" && !!html)
+        $modal.updateHeader = function (text, html) {
+            if (typeof html !== "undefined" && !!html)
                 Vanilla.setText(modal_header, text, html);
             else
                 Vanilla.setText(modal_header, text);
@@ -283,8 +283,8 @@
             return $modal;
         };
 
-        $modal.updateContent = function(text, html){
-            if(typeof html !== "undefined" && !!html)
+        $modal.updateContent = function (text, html) {
+            if (typeof html !== "undefined" && !!html)
                 Vanilla.setText(modal_content, text, html);
             else
                 Vanilla.setText(modal_content, text);
@@ -292,8 +292,15 @@
             return $modal;
         };
 
-        $modal.show = function(){
-            if(!$modal.addedToDOM){
+        $modal.updateClass = function (klass) {
+            if (typeof klass === "string")
+                modal_window.setAttribute('class', klass);
+
+            return $modal;
+        };
+
+        $modal.show = function (callback) {
+            if (!$modal.addedToDOM) {
                 document.body.appendChild(modal_wrap);
                 $modal.addedToDOM = true;
             }
@@ -301,30 +308,34 @@
             Object(modal_wrap).style.display = "block";
             $modal.visible = true;
 
-            if(typeof configs.showCallback === "function")
+            if (typeof callback === "function")
+                callback();
+            else if (typeof configs.showCallback === "function")
                 configs.showCallback();
 
             return $modal;
         };
 
-        $modal.hide = function(){
-            if(!!$modal.addedToDOM){
+        $modal.hide = function (callback) {
+            if (!!$modal.addedToDOM) {
                 Object(modal_wrap).style.display = "none";
                 $modal.visible = false;
             }
 
-            if(typeof configs.hideCallback === "function")
+            if (typeof callback === "function")
+                callback();
+            else if (typeof configs.hideCallback === "function")
                 configs.hideCallback();
 
             return $modal;
         };
 
-        $modal.destroy = function(){
+        $modal.destroy = function () {
             document.body.removeChild(modal_wrap);
             $modal = null;
         };
 
-        Vanilla.event(modal_closer, 'click', function(){
+        Vanilla.event(modal_closer, 'click', function () {
             $modal.hide();
         }, false);
 
@@ -352,7 +363,7 @@
                 pass: configs.pass || false
             };
 
-        if(!methods.test(options.method))
+        if (!methods.test(options.method))
             options.method = "GET";
 
         if (typeof options.beforeSend === "function")
