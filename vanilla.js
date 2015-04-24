@@ -7,6 +7,11 @@
     var Vanilla = {},
         $modal = null;
 
+    /**
+     *
+     * @param callback
+     * @returns {boolean}
+     */
     Vanilla.ready = function (callback) {
         if (document.readyState === "complete") {
             if (typeof callback === "function")
@@ -42,6 +47,14 @@
         return false;
     };
 
+    /**
+     *
+     * @param type
+     * @param attrs
+     * @param text
+     * @param html
+     * @returns {HTMLElement}
+     */
     Vanilla.createEl = function (type, attrs, text, html) {
         var el = document.createElement(type);
         if (typeof attrs !== "undefined")
@@ -57,6 +70,12 @@
         return el;
     };
 
+    /**
+     *
+     * @param el
+     * @param attrs
+     * @returns {boolean}
+     */
     Vanilla.setAttributes = function (el, attrs) {
         for (var attr in attrs) {
             if (Object.prototype.hasOwnProperty.call(attrs, attr))
@@ -66,6 +85,12 @@
         return false;
     };
 
+    /**
+     *
+     * @param obj
+     * @param klass
+     * @returns {boolean}
+     */
     Vanilla.hasClass = function (obj, klass) {
         if (!obj.hasAttribute('class'))
             return false;
@@ -83,6 +108,12 @@
         return false;
     };
 
+    /**
+     *
+     * @param obj
+     * @param klass
+     * @returns {boolean}
+     */
     Vanilla.removeClass = function (obj, klass) {
         if (!obj.hasAttribute('class'))
             return false;
@@ -100,6 +131,12 @@
         return false;
     };
 
+    /**
+     *
+     * @param obj
+     * @param klass
+     * @returns {boolean}
+     */
     Vanilla.addClass = function (obj, klass) {
         var class_list = (obj.hasAttribute('class')) ? obj.getAttribute('class').split(' ') : [];
 
@@ -111,6 +148,12 @@
         return false;
     };
 
+    /**
+     *
+     * @param obj
+     * @param klass
+     * @returns {boolean}
+     */
     Vanilla.toggleClass = function (obj, klass) {
         if (Vanilla.hasClass(obj, klass))
             Vanilla.removeClass(obj, klass);
@@ -120,6 +163,12 @@
         return false;
     };
 
+    /**
+     *
+     * @param objs
+     * @param klass
+     * @returns {boolean}
+     */
     Vanilla.batchRemoveClass = function (objs, klass) {
         for (var obj in objs) {
             if (Object.prototype.hasOwnProperty.call(objs, obj) &&
@@ -132,6 +181,14 @@
         return false;
     };
 
+    /**
+     *
+     * @param el
+     * @param event
+     * @param func
+     * @param bubbles
+     * @returns {boolean}
+     */
     Vanilla.event = function (el, event, func, bubbles) {
         var _bubbles = (typeof bubbles !== "undefined" && (!!bubbles || !bubbles)) ? bubbles : false;
 
@@ -149,6 +206,14 @@
         return false;
     };
 
+    /**
+     *
+     * @param el
+     * @param event
+     * @param func
+     * @param bubbles
+     * @returns {boolean}
+     */
     Vanilla.remove = function (el, event, func, bubbles) {
         var _bubbles = (typeof bubbles !== "undefined" && (!!bubbles || !bubbles)) ? bubbles : false;
 
@@ -166,6 +231,11 @@
         return false;
     };
 
+    /**
+     *
+     * @param event
+     * @returns {boolean}
+     */
     Vanilla.stop = function (event) {
         if (event.stopPropagation)
             event.stopPropagation();
@@ -175,6 +245,13 @@
         return false;
     };
 
+    /**
+     *
+     * @param el
+     * @param text
+     * @param html
+     * @returns {boolean}
+     */
     Vanilla.setText = function (el, text, html) {
         if (typeof html !== "undefined" && html === true)
             el.innerHTML = text;
@@ -186,10 +263,19 @@
         return false;
     };
 
+    /**
+     *
+     * @param el
+     * @returns {string|*}
+     */
     Vanilla.getText = function (el) {
         return (document.all) ? el.innerText : el.textContent;
     };
 
+    /**
+     *
+     * @returns {object}
+     */
     Vanilla.getUrlParams = function () {
         var params = {},
             search = window.location.search;
@@ -206,6 +292,11 @@
         return params;
     };
 
+    /**
+     *
+     * @param obj
+     * @returns {string}
+     */
     Vanilla.stringifyUrlParams = function (obj) {
         var params = [];
 
@@ -217,6 +308,13 @@
         return params.join('&');
     };
 
+    /**
+     *
+     * @param param
+     * @param value
+     * @param allow_reload
+     * @returns {object}
+     */
     Vanilla.setUrlParam = function (param, value, allow_reload) {
         var params = Vanilla.getUrlParams();
 
@@ -230,6 +328,12 @@
         return params;
     };
 
+    /**
+     *
+     * @param param
+     * @param allow_reload
+     * @returns {object}
+     */
     Vanilla.removeUrlParam = function (param, allow_reload) {
         var params = Vanilla.getUrlParams(),
             param_string;
@@ -249,6 +353,11 @@
         return params;
     };
 
+    /**
+     *
+     * @param options
+     * @returns {object}
+     */
     Vanilla.modal = function (options) {
         if ($modal !== null)
             return $modal;
@@ -345,6 +454,12 @@
         return $modal;
     };
 
+    /**
+     *
+     * @param action
+     * @param configs
+     * @returns {XMLHttpRequest}
+     */
     Vanilla.ajax = function (action, configs) {
         if (typeof action === "undefined" || action === null || !action)
             return false;
@@ -406,7 +521,12 @@
         return request;
     };
 
-    Vanilla.serialize = function (form) {
+    /**
+     *
+     * @param form
+     * @returns {string}
+     */
+    Vanilla.serializeForm = function (form) {
         if (form.tagName.toLowerCase() !== "form")
             return false;
 
