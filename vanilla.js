@@ -13,33 +13,22 @@
      * @returns {boolean}
      */
     Vanilla.ready = function (callback) {
-        if (document.readyState === "complete") {
-            if (typeof callback === "function")
+        if (typeof callback === "function") {
+            if (document.readyState === "complete") {
                 callback();
-        } else {
-            if (document.addEventListener) {
-                try {
-                    document.addEventListener("DOMContentLoaded", function () {
-                        if (typeof callback === "function")
-                            callback();
-                    }, false);
-                } catch (e) {
-                    window.addEventListener("load", function () {
-                        if (typeof callback === "function")
-                            callback();
-                    }, false);
-                }
-            } else if (document.attachEvent) {
-                try {
-                    document.attachEvent("onreadystatechange", function () {
-                        if (typeof callback === "function")
-                            callback();
-                    });
-                } catch (e) {
-                    window.attachEvent("onload", function () {
-                        if (typeof callback === "function")
-                            callback();
-                    });
+            } else {
+                if (document.addEventListener) {
+                    try {
+                        document.addEventListener("DOMContentLoaded", callback, false);
+                    } catch (e) {
+                        window.addEventListener("load", callback, false);
+                    }
+                } else if (document.attachEvent) {
+                    try {
+                        document.attachEvent("onreadystatechange", callback);
+                    } catch (e) {
+                        window.attachEvent("onload", callback);
+                    }
                 }
             }
         }
