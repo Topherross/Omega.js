@@ -9,8 +9,8 @@
 
     /**
      *
-     * @param callback
-     * @returns {boolean}
+     * @param {Function} callback
+     * @returns {boolean} false
      */
     Vanilla.ready = function (callback) {
         if (typeof callback === "function") {
@@ -38,18 +38,19 @@
 
     /**
      *
-     * @param type
-     * @param attrs
-     * @param text
-     * @param html
+     * @param {string} type
+     * @param {Object} [attributes]
+     * @param {string} [text]
+     * @param {boolean} [html]
      * @returns {HTMLElement}
      */
-    Vanilla.createEl = function (type, attrs, text, html) {
+    Vanilla.createEl = function (type, attributes, text, html) {
         var el = document.createElement(type);
-        if (typeof attrs !== "undefined")
-            Vanilla.setAttributes(el, attrs);
 
-        if (typeof text !== "undefined" && !!text) {
+        if (typeof attributes !== "undefined")
+            Vanilla.setAttributes(el, attributes);
+
+        if (typeof text !== "undefined") {
             if (typeof html !== "undefined" && !!html)
                 Vanilla.setText(el, text, true);
             else
@@ -61,14 +62,14 @@
 
     /**
      *
-     * @param el
-     * @param attrs
-     * @returns {boolean}
+     * @param {HTMLElement} el
+     * @param {Object} attributes
+     * @returns {boolean} false
      */
-    Vanilla.setAttributes = function (el, attrs) {
-        for (var attr in attrs) {
-            if (Object.prototype.hasOwnProperty.call(attrs, attr))
-                el.setAttribute(attr, attrs[attr]);
+    Vanilla.setAttributes = function (el, attributes) {
+        for (var attr in attributes) {
+            if (Object.prototype.hasOwnProperty.call(attributes, attr))
+                el.setAttribute(attr, attributes[attr]);
         }
 
         return false;
@@ -76,15 +77,15 @@
 
     /**
      *
-     * @param obj
-     * @param klass
-     * @returns {boolean}
+     * @param {HTMLElement} el
+     * @param {string} klass
+     * @returns {boolean} false
      */
-    Vanilla.hasClass = function (obj, klass) {
-        if (!obj.hasAttribute('class'))
+    Vanilla.hasClass = function (el, klass) {
+        if (!el.hasAttribute('class'))
             return false;
 
-        var class_list = obj.getAttribute('class').split(' ');
+        var class_list = el.getAttribute('class').split(' ');
 
         if (typeof class_list !== "undefined") {
             for (var class_name in class_list) {
@@ -99,20 +100,20 @@
 
     /**
      *
-     * @param obj
-     * @param klass
-     * @returns {boolean}
+     * @param {HTMLElement} el
+     * @param {string} klass
+     * @returns {boolean} false
      */
-    Vanilla.removeClass = function (obj, klass) {
-        if (!obj.hasAttribute('class'))
+    Vanilla.removeClass = function (el, klass) {
+        if (!el.hasAttribute('class'))
             return false;
 
-        var class_list = obj.getAttribute('class').split(' ');
+        var class_list = el.getAttribute('class').split(' ');
 
         for (var class_name in class_list) {
             if (Object.prototype.hasOwnProperty.call(class_list, class_name) && class_list[class_name] == klass) {
                 class_list.splice(class_name, 1);
-                obj.setAttribute('class', class_list.join(' '));
+                el.setAttribute('class', class_list.join(' '));
                 break;
             }
         }
@@ -122,16 +123,16 @@
 
     /**
      *
-     * @param obj
-     * @param klass
-     * @returns {boolean}
+     * @param {HTMLElement} el
+     * @param {string} klass
+     * @returns {boolean} false
      */
-    Vanilla.addClass = function (obj, klass) {
-        var class_list = (obj.hasAttribute('class')) ? obj.getAttribute('class').split(' ') : [];
+    Vanilla.addClass = function (el, klass) {
+        var class_list = (el.hasAttribute('class')) ? el.getAttribute('class').split(' ') : [];
 
-        if (!Vanilla.hasClass(obj, klass)) {
+        if (!Vanilla.hasClass(el, klass)) {
             class_list.push(klass);
-            obj.setAttribute('class', class_list.join(' '));
+            el.setAttribute('class', class_list.join(' '));
         }
 
         return false;
@@ -139,23 +140,23 @@
 
     /**
      *
-     * @param obj
-     * @param klass
-     * @returns {boolean}
+     * @param {HTMLElement} el
+     * @param {string} klass
+     * @returns {boolean} false
      */
-    Vanilla.toggleClass = function (obj, klass) {
-        if (Vanilla.hasClass(obj, klass))
-            Vanilla.removeClass(obj, klass);
+    Vanilla.toggleClass = function (el, klass) {
+        if (Vanilla.hasClass(el, klass))
+            Vanilla.removeClass(el, klass);
         else
-            Vanilla.addClass(obj, klass);
+            Vanilla.addClass(el, klass);
 
         return false;
     };
 
     /**
      *
-     * @param objs
-     * @param klass
+     * @param {Object} objs
+     * @param {string} klass
      * @returns {boolean}
      */
     Vanilla.batchRemoveClass = function (objs, klass) {
@@ -172,10 +173,10 @@
 
     /**
      *
-     * @param el
-     * @param event
-     * @param func
-     * @param bubbles
+     * @param {HTMLElement} el
+     * @param {String} event
+     * @param {Function} func
+     * @param {boolean} [bubbles]
      * @returns {boolean}
      */
     Vanilla.event = function (el, event, func, bubbles) {
@@ -187,7 +188,7 @@
             }, _bubbles);
         else if (document.attachEvent)
             el.attachEvent("on" + event, function (e) {
-                func(e)
+                func(e);
             });
         else
             el["on" + event] = null;
@@ -197,10 +198,10 @@
 
     /**
      *
-     * @param el
-     * @param event
-     * @param func
-     * @param bubbles
+     * @param {HTMLElement} el
+     * @param {String} event
+     * @param {Function} func
+     * @param {boolean} [bubbles]
      * @returns {boolean}
      */
     Vanilla.remove = function (el, event, func, bubbles) {
@@ -212,7 +213,7 @@
             }, _bubbles);
         else if (document.detachEvent)
             el.detachEvent("on" + event, function (e) {
-                func(e)
+                func(e);
             });
         else
             el["on" + event] = null;
@@ -222,7 +223,7 @@
 
     /**
      *
-     * @param event
+     * @param {Event} event
      * @returns {boolean}
      */
     Vanilla.stop = function (event) {
@@ -236,13 +237,13 @@
 
     /**
      *
-     * @param el
-     * @param text
-     * @param html
+     * @param {HTMLElement} el
+     * @param {string} text
+     * @param {boolean} [html]
      * @returns {boolean}
      */
     Vanilla.setText = function (el, text, html) {
-        if (typeof html !== "undefined" && html === true)
+        if (typeof html !== "undefined" && !!html)
             el.innerHTML = text;
         else if (document.all)
             el.innerText = text;
@@ -254,7 +255,7 @@
 
     /**
      *
-     * @param el
+     * @param {HTMLElement} el
      * @returns {string|*}
      */
     Vanilla.getText = function (el) {
@@ -283,7 +284,7 @@
 
     /**
      *
-     * @param obj
+     * @param {Object} obj
      * @returns {string}
      */
     Vanilla.stringifyUrlParams = function (obj) {
@@ -299,9 +300,9 @@
 
     /**
      *
-     * @param param
-     * @param value
-     * @param allow_reload
+     * @param {String} param
+     * @param {(String|Number)} value
+     * @param {boolean} allow_reload
      * @returns {object}
      */
     Vanilla.setUrlParam = function (param, value, allow_reload) {
@@ -319,8 +320,8 @@
 
     /**
      *
-     * @param param
-     * @param allow_reload
+     * @param {String} param
+     * @param {boolean} allow_reload
      * @returns {object}
      */
     Vanilla.removeUrlParam = function (param, allow_reload) {
@@ -344,7 +345,7 @@
 
     /**
      *
-     * @param options
+     * @param {Object} options
      * @returns {object}
      */
     Vanilla.modal = function (options) {
@@ -372,6 +373,12 @@
         $modal.addedToDOM = false;
         $modal.visible = false;
 
+        /**
+         *
+         * @param {String} text
+         * @param {boolean} html
+         * @returns {Object} $modal
+         */
         $modal.updateHeader = function (text, html) {
             if (typeof html !== "undefined" && !!html)
                 Vanilla.setText(modal_header, text, html);
@@ -381,6 +388,12 @@
             return $modal;
         };
 
+        /**
+         *
+         * @param {String} text
+         * @param {boolean} html
+         * @returns {Object} $modal
+         */
         $modal.updateContent = function (text, html) {
             if (typeof html !== "undefined" && !!html)
                 Vanilla.setText(modal_content, text, html);
@@ -390,6 +403,11 @@
             return $modal;
         };
 
+        /**
+         *
+         * @param {String} klass
+         * @returns {Object} $modal
+         */
         $modal.updateClass = function (klass) {
             if (typeof klass === "string")
                 modal_window.setAttribute('class', klass);
@@ -397,6 +415,11 @@
             return $modal;
         };
 
+        /**
+         *
+         * @param {Function} callback
+         * @returns {Object} $modal
+         */
         $modal.show = function (callback) {
             if (!$modal.addedToDOM) {
                 document.body.appendChild(modal_wrap);
@@ -414,6 +437,11 @@
             return $modal;
         };
 
+        /**
+         *
+         * @param {Function} callback
+         * @returns {Object} $modal
+         */
         $modal.hide = function (callback) {
             if (!!$modal.addedToDOM) {
                 Object(modal_wrap).style.display = "none";
@@ -428,9 +456,15 @@
             return $modal;
         };
 
+        /**
+         *
+         * @returns {boolean}
+         */
         $modal.destroy = function () {
             document.body.removeChild(modal_wrap);
             $modal = null;
+
+            return false;
         };
 
         Vanilla.event(modal_closer, 'click', function () {
@@ -445,8 +479,8 @@
 
     /**
      *
-     * @param action
-     * @param configs
+     * @param {String} action
+     * @param {Object} configs
      * @returns {XMLHttpRequest}
      */
     Vanilla.ajax = function (action, configs) {
@@ -512,7 +546,7 @@
 
     /**
      *
-     * @param form
+     * @param {HTMLFormElement} form
      * @returns {string}
      */
     Vanilla.serializeForm = function (form) {
