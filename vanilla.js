@@ -5,7 +5,8 @@
     'use strict';
 
     var Vanilla = {},
-        $modal = null;
+        $modal = null,
+        $accordion = null;
 
     /**
      *
@@ -475,6 +476,72 @@
         $modal.addedToDOM = true;
 
         return $modal;
+    };
+
+    Vanilla.fadeIn = function(el, speed, callback){
+        var step = 0.01;
+
+        el.style.opacity = parseFloat(el.style.opacity) + step;
+
+        if (el.style.opacity > 1.0) {
+            el.style.opacity = 1.0;
+            if (typeof callback === "function") callback();
+        } else {
+            setTimeout(function () {
+                Vanilla.fadeIn(el, speed, callback)
+            }, speed);
+        }
+
+        return false;
+    };
+
+    Vanilla.fadeOut = function(el, speed, callback){
+        var step = 0.01;
+
+        el.style.opacity = parseFloat(el.style.opacity) - step;
+
+        if (el.style.opacity < step) {
+            el.style.opacity = 0.0;
+            if (typeof callback === "function") callback();
+        } else {
+            setTimeout(function () {
+                Vanilla.fadeOut(el, speed, callback)
+            }, speed);
+        }
+
+        return false;
+    };
+
+    Vanilla.slideDown = function(el, speed, callback){
+        var height = (typeof el.style.height !== "undefined") ? parseFloat(el.style.height) : 0;
+
+        if (height < 580) {
+            height += 29;
+            el.style.height = height + "px";
+            setTimeout(function () {
+                Vanilla.slideDown(el, speed, callback)
+            }, speed);
+        } else if (typeof callback === "function") {
+            callback();
+        }
+
+        return false;
+    };
+
+    Vanilla.slideUp = function(el, speed, callback){
+        var height = (typeof el.style.height !== "undefined") ? parseFloat(el.style.height) : 580;
+
+        if (height > 0) {
+            height -= 29;
+            el.style.height = height + "px";
+            setTimeout(function () {
+                Vanilla.slideUp(el, speed, callback)
+            }, speed);
+        } else if (typeof callback === "function") {
+            callback();
+        }
+
+        return false;
     };
 
     /**
