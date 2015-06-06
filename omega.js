@@ -4,16 +4,15 @@
 (function () {
     'use strict';
 
-    var Vanilla = {},
-        $modal = null,
-        $accordion = null;
+    var Omega = {},
+        $modal = null;
 
     /**
      *
      * @param {Function} callback
      * @returns {boolean} false
      */
-    Vanilla.ready = function (callback) {
+    Omega.ready = function (callback) {
         if (typeof callback === "function") {
             if (document.readyState === "complete") {
                 callback();
@@ -45,17 +44,17 @@
      * @param {boolean} [html]
      * @returns {HTMLElement}
      */
-    Vanilla.createEl = function (type, attributes, text, html) {
+    Omega.createEl = function (type, attributes, text, html) {
         var el = document.createElement(type);
 
         if (typeof attributes !== "undefined")
-            Vanilla.setAttributes(el, attributes);
+            Omega.setAttributes(el, attributes);
 
         if (typeof text !== "undefined") {
             if (typeof html !== "undefined" && !!html)
-                Vanilla.setText(el, text, true);
+                Omega.setText(el, text, true);
             else
-                Vanilla.setText(el, text);
+                Omega.setText(el, text);
         }
 
         return el;
@@ -67,7 +66,7 @@
      * @param {Object} attributes
      * @returns {boolean} false
      */
-    Vanilla.setAttributes = function (el, attributes) {
+    Omega.setAttributes = function (el, attributes) {
         for (var attr in attributes) {
             if (Object.prototype.hasOwnProperty.call(attributes, attr))
                 el.setAttribute(attr, attributes[attr]);
@@ -82,16 +81,41 @@
      * @param {string} klass
      * @returns {boolean} false
      */
-    Vanilla.hasClass = function (el, klass) {
+    Omega.hasClass = function (el, klass) {
         if (!el.hasAttribute('class'))
             return false;
 
         var class_list = el.getAttribute('class').split(' ');
 
-        if (typeof class_list !== "undefined") {
-            for (var class_name in class_list) {
-                if (Object.prototype.hasOwnProperty.call(class_list, class_name) && class_list[class_name] == klass) {
+        if (typeof class_list !== "undefined" &&
+            class_list.length > 0) {
+            for (var c = 0; c < class_list.length; c++) {
+                if(class_list[c] == klass)
                     return true;
+            }
+        }
+
+        return false;
+    };
+
+    /**
+     *
+     * @param {HTMLElement} el
+     * @param {string} klass
+     * @returns {boolean} false
+     */
+    Omega.removeClass = function (el, klass) {
+        if (!el.hasAttribute('class'))
+            return false;
+
+        var class_list = el.getAttribute('class').split(' ');
+
+        if(class_list.length > 0){
+            for(var c = 0; c < class_list.length; c++){
+                if(class_list[c] == klass){
+                    class_list.splice(c, 1);
+                    el.setAttribute('class', class_list.join(' '));
+                    break;
                 }
             }
         }
@@ -105,33 +129,10 @@
      * @param {string} klass
      * @returns {boolean} false
      */
-    Vanilla.removeClass = function (el, klass) {
-        if (!el.hasAttribute('class'))
-            return false;
-
-        var class_list = el.getAttribute('class').split(' ');
-
-        for (var class_name in class_list) {
-            if (Object.prototype.hasOwnProperty.call(class_list, class_name) && class_list[class_name] == klass) {
-                class_list.splice(class_name, 1);
-                el.setAttribute('class', class_list.join(' '));
-                break;
-            }
-        }
-
-        return false;
-    };
-
-    /**
-     *
-     * @param {HTMLElement} el
-     * @param {string} klass
-     * @returns {boolean} false
-     */
-    Vanilla.addClass = function (el, klass) {
+    Omega.addClass = function (el, klass) {
         var class_list = (el.hasAttribute('class')) ? el.getAttribute('class').split(' ') : [];
 
-        if (!Vanilla.hasClass(el, klass)) {
+        if (!Omega.hasClass(el, klass)) {
             class_list.push(klass);
             el.setAttribute('class', class_list.join(' '));
         }
@@ -145,11 +146,11 @@
      * @param {string} klass
      * @returns {boolean} false
      */
-    Vanilla.toggleClass = function (el, klass) {
-        if (Vanilla.hasClass(el, klass))
-            Vanilla.removeClass(el, klass);
+    Omega.toggleClass = function (el, klass) {
+        if (Omega.hasClass(el, klass))
+            Omega.removeClass(el, klass);
         else
-            Vanilla.addClass(el, klass);
+            Omega.addClass(el, klass);
 
         return false;
     };
@@ -160,13 +161,14 @@
      * @param {string} klass
      * @returns {boolean}
      */
-    Vanilla.batchRemoveClass = function (objs, klass) {
-        for (var obj in objs) {
-            if (Object.prototype.hasOwnProperty.call(objs, obj) &&
-                obj != 'length' &&
-                obj != 'item' &&
-                objs[obj].hasAttribute('class'))
-                Vanilla.removeClass(objs[obj], klass);
+    Omega.batchRemoveClass = function (objs, klass) {
+        if(objs.length == 0)
+            return false;
+
+        for(var obj = 0; obj < objs.length; obj++){
+            if(objs[obj].hasAttribute('class') &&
+                Omega.hasClass(objs[obj], klass))
+                Omega.removeClass(objs[obj], klass);
         }
 
         return false;
@@ -180,7 +182,7 @@
      * @param {boolean} [bubbles]
      * @returns {boolean}
      */
-    Vanilla.event = function (el, event, func, bubbles) {
+    Omega.event = function (el, event, func, bubbles) {
         var _bubbles = (typeof bubbles !== "undefined" && (!!bubbles || !bubbles)) ? bubbles : false;
 
         if (document.addEventListener)
@@ -205,7 +207,7 @@
      * @param {boolean} [bubbles]
      * @returns {boolean}
      */
-    Vanilla.remove = function (el, event, func, bubbles) {
+    Omega.remove = function (el, event, func, bubbles) {
         var _bubbles = (typeof bubbles !== "undefined" && (!!bubbles || !bubbles)) ? bubbles : false;
 
         if (document.removeEventListener)
@@ -227,7 +229,7 @@
      * @param {Event} event
      * @returns {boolean}
      */
-    Vanilla.stop = function (event) {
+    Omega.stop = function (event) {
         if (event.stopPropagation)
             event.stopPropagation();
         else
@@ -243,7 +245,7 @@
      * @param {boolean} [html]
      * @returns {boolean}
      */
-    Vanilla.setText = function (el, text, html) {
+    Omega.setText = function (el, text, html) {
         if (typeof html !== "undefined" && !!html)
             el.innerHTML = text;
         else if (document.all)
@@ -259,7 +261,7 @@
      * @param {HTMLElement} el
      * @returns {string|*}
      */
-    Vanilla.getText = function (el) {
+    Omega.getText = function (el) {
         return (document.all) ? el.innerText : el.textContent;
     };
 
@@ -267,7 +269,7 @@
      *
      * @returns {object}
      */
-    Vanilla.getUrlParams = function () {
+    Omega.getUrlParams = function () {
         var params = {},
             search = window.location.search;
 
@@ -288,7 +290,7 @@
      * @param {Object} obj
      * @returns {string}
      */
-    Vanilla.stringifyUrlParams = function (obj) {
+    Omega.stringifyUrlParams = function (obj) {
         var params = [];
 
         for (var key in obj) {
@@ -306,15 +308,15 @@
      * @param {boolean} allow_reload
      * @returns {object}
      */
-    Vanilla.setUrlParam = function (param, value, allow_reload) {
-        var params = Vanilla.getUrlParams();
+    Omega.setUrlParam = function (param, value, allow_reload) {
+        var params = Omega.getUrlParams();
 
         params[param] = value;
 
         if (window.history.pushState)
-            window.history.pushState({}, "", window.location.pathname + '?' + Vanilla.stringifyUrlParams(params));
+            window.history.pushState({}, "", window.location.pathname + '?' + Omega.stringifyUrlParams(params));
         else if (typeof allow_reload !== "undefined" && !!allow_reload)
-            window.location.search = Vanilla.stringifyUrlParams(params);
+            window.location.search = Omega.stringifyUrlParams(params);
 
         return params;
     };
@@ -325,14 +327,14 @@
      * @param {boolean} allow_reload
      * @returns {object}
      */
-    Vanilla.removeUrlParam = function (param, allow_reload) {
-        var params = Vanilla.getUrlParams(),
+    Omega.removeUrlParam = function (param, allow_reload) {
+        var params = Omega.getUrlParams(),
             param_string;
 
         if (Object.prototype.hasOwnProperty.call(params, param))
             delete params[param];
 
-        param_string = Vanilla.stringifyUrlParams(params);
+        param_string = Omega.stringifyUrlParams(params);
 
         if (window.history.pushState && param_string === "")
             window.history.pushState({}, "", window.location.pathname);
@@ -349,7 +351,7 @@
      * @param {Object} options
      * @returns {object}
      */
-    Vanilla.modal = function (options) {
+    Omega.modal = function (options) {
         if ($modal !== null)
             return $modal;
 
@@ -360,11 +362,11 @@
                 showCallback: options.showCallback || false,
                 hideCallback: options.hideCallback || false
             },
-            modal_wrap = Vanilla.createEl('div', {'id': 'vanilla_modal_wrap', 'style': 'display:none;'}),
-            modal_window = Vanilla.createEl('div', {'id': 'vanilla_modal_window'}),
-            modal_header = Vanilla.createEl('h1', {'id': 'vanilla_modal_header'}),
-            modal_closer = Vanilla.createEl('div', {'id': 'vanilla_modal_closer'}),
-            modal_content = Vanilla.createEl('div', {'id': 'vanilla_modal_content'});
+            modal_wrap = Omega.createEl('div', {'id': 'vanilla_modal_wrap', 'style': 'display:none;'}),
+            modal_window = Omega.createEl('div', {'id': 'vanilla_modal_window'}),
+            modal_header = Omega.createEl('h1', {'id': 'vanilla_modal_header'}),
+            modal_closer = Omega.createEl('div', {'id': 'vanilla_modal_closer'}),
+            modal_content = Omega.createEl('div', {'id': 'vanilla_modal_content'});
 
         modal_window.appendChild(modal_header);
         modal_window.appendChild(modal_closer);
@@ -382,9 +384,9 @@
          */
         $modal.updateHeader = function (text, html) {
             if (typeof html !== "undefined" && !!html)
-                Vanilla.setText(modal_header, text, html);
+                Omega.setText(modal_header, text, html);
             else
-                Vanilla.setText(modal_header, text);
+                Omega.setText(modal_header, text);
 
             return $modal;
         };
@@ -397,9 +399,9 @@
          */
         $modal.updateContent = function (text, html) {
             if (typeof html !== "undefined" && !!html)
-                Vanilla.setText(modal_content, text, html);
+                Omega.setText(modal_content, text, html);
             else
-                Vanilla.setText(modal_content, text);
+                Omega.setText(modal_content, text);
 
             return $modal;
         };
@@ -468,7 +470,7 @@
             return false;
         };
 
-        Vanilla.event(modal_closer, 'click', function () {
+        Omega.event(modal_closer, 'click', function () {
             $modal.hide();
         }, false);
 
@@ -478,7 +480,7 @@
         return $modal;
     };
 
-    Vanilla.fadeIn = function(el, speed, callback){
+    Omega.fadeIn = function(el, speed, callback){
         var step = 0.01;
 
         el.style.opacity = parseFloat(el.style.opacity) + step;
@@ -488,14 +490,14 @@
             if (typeof callback === "function") callback();
         } else {
             setTimeout(function () {
-                Vanilla.fadeIn(el, speed, callback)
+                Omega.fadeIn(el, speed, callback)
             }, speed);
         }
 
         return false;
     };
 
-    Vanilla.fadeOut = function(el, speed, callback){
+    Omega.fadeOut = function(el, speed, callback){
         var step = 0.01;
 
         el.style.opacity = parseFloat(el.style.opacity) - step;
@@ -505,21 +507,21 @@
             if (typeof callback === "function") callback();
         } else {
             setTimeout(function () {
-                Vanilla.fadeOut(el, speed, callback)
+                Omega.fadeOut(el, speed, callback)
             }, speed);
         }
 
         return false;
     };
 
-    Vanilla.slideDown = function(el, speed, callback){
+    Omega.slideDown = function(el, speed, callback){
         var height = (typeof el.style.height !== "undefined") ? parseFloat(el.style.height) : 0;
 
         if (height < 580) {
             height += 29;
             el.style.height = height + "px";
             setTimeout(function () {
-                Vanilla.slideDown(el, speed, callback)
+                Omega.slideDown(el, speed, callback)
             }, speed);
         } else if (typeof callback === "function") {
             callback();
@@ -528,14 +530,14 @@
         return false;
     };
 
-    Vanilla.slideUp = function(el, speed, callback){
+    Omega.slideUp = function(el, speed, callback){
         var height = (typeof el.style.height !== "undefined") ? parseFloat(el.style.height) : 580;
 
         if (height > 0) {
             height -= 29;
             el.style.height = height + "px";
             setTimeout(function () {
-                Vanilla.slideUp(el, speed, callback)
+                Omega.slideUp(el, speed, callback)
             }, speed);
         } else if (typeof callback === "function") {
             callback();
@@ -550,7 +552,7 @@
      * @param {Object} configs
      * @returns {XMLHttpRequest}
      */
-    Vanilla.ajax = function (action, configs) {
+    Omega.ajax = function (action, configs) {
         if (typeof action === "undefined" || action === null || !action)
             return false;
 
@@ -616,7 +618,7 @@
      * @param {HTMLFormElement} form
      * @returns {string}
      */
-    Vanilla.serializeForm = function (form) {
+    Omega.serializeForm = function (form) {
         if (form.tagName.toLowerCase() !== "form")
             return false;
 
@@ -647,8 +649,8 @@
     };
 
     if (typeof module !== 'undefined' && module.exports) {
-        module.exports = Vanilla;
+        module.exports = Omega;
     } else {
-        window.Vanilla = Vanilla;
+        window.Omega = window.Ω = Omega;
     }
 })();
