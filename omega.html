@@ -3,190 +3,226 @@
 <head lang="en">
     <meta charset="UTF-8">
     <script type="text/javascript" src="omega.js"></script>
-    <title>Vanilla JS Tests</title>
+    <title>Omega JS Tests</title>
     <style type="text/css">
-        *{
-            margin:0;
-            padding:0;
-            border:none 0;
-            font-size:14px;
-            box-sizing:border-box;
+        * {
+            margin: 0;
+            padding: 0;
+            border: none 0;
+            font-size: 14px;
+            box-sizing: border-box;
         }
 
-        html, body{
-            width:100%;
-            height:auto;
-            min-height:100%;
-            position:relative;
+        html, body {
+            width: 100%;
+            height: auto;
+            min-height: 100%;
+            position: relative;
         }
 
-        html{
+        html {
 
         }
 
-        body{
-            background:rgb(78,78,78);
+        body {
+            background: rgb(78, 78, 78);
         }
 
-        form{
-            overflow:auto;
-            position:relative;
-            margin:10px auto 20px;
-            width:320px;
+        form {
+            overflow: auto;
+            position: relative;
+            margin: 10px auto 20px;
+            width: 320px;
         }
 
-        input, select, textarea{
-            float:left;
-            clear:left;
-            position:relative;
-            margin:4px 0 10px;
+        input, select, textarea {
+            float: left;
+            clear: left;
+            position: relative;
+            margin: 4px 0 10px;
         }
 
-        label{
-            float:left;
-            clear:left;
+        label {
+            float: left;
+            clear: left;
         }
 
         input[type="radio"] + label,
-        input[type="checkbox"] + label{
-            clear:none;
-            padding:4px 0 10px 10px;
+        input[type="checkbox"] + label {
+            clear: none;
+            padding: 4px 0 10px 10px;
         }
 
-        #vanilla_modal_wrap{
-            background:rgba(255,255,255,0.6);
-            width:100%;height:100%;
-            position:fixed;
-            top:0;
-            left:0;
+        #vanilla_modal_wrap {
+            background: rgba(255, 255, 255, 0.6);
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
         }
 
-        #vanilla_modal_wrap *{
-            box-sizing:border-box;
+        #vanilla_modal_wrap * {
+            box-sizing: border-box;
         }
 
-        #vanilla_modal_window{
-            position:absolute;
-            width:400px;height:260px;
-            background:rgb(255,255,255);
-            border:rgb(120,120,120) 2px solid;
-            top:30%;
-            left:50%;
-            margin:-130px 0 0 -200px;
+        #vanilla_modal_window {
+            position: absolute;
+            width: 400px;
+            height: 260px;
+            background: rgb(255, 255, 255);
+            border: rgb(120, 120, 120) 2px solid;
+            top: 30%;
+            left: 50%;
+            margin: -130px 0 0 -200px;
         }
 
-        #vanilla_modal_header{
-            margin:0 50px 0 0;
+        #vanilla_modal_header {
+            margin: 0 50px 0 0;
         }
 
-        #vanilla_modal_closer{
-            position:absolute;
-            top:0;
-            right:0;
-            width:20px;
-            height:20px;
+        #vanilla_modal_closer {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 20px;
+            height: 20px;
         }
 
-        #vanilla_modal_closer:after{
-            content:'X';
-            text-align:center;
-            font-family:"Arial Black", sans-serif;
-            font-size:16px;
-            text-transform:uppercase;
-            font-weight:600;
+        #vanilla_modal_closer:after {
+            content: 'X';
+            text-align: center;
+            font-family: "Arial Black", sans-serif;
+            font-size: 16px;
+            text-transform: uppercase;
+            font-weight: 600;
         }
 
-        #vanilla_modal_content{
+        #vanilla_modal_content {
 
+        }
+
+        #swipe_target {
+            box-sizing: border-box;
+            width: 100%;
+            height: 300px;
+            background: rgba(120, 120, 120, 0.4);
+            margin: 20px 0;
         }
     </style>
 </head>
 <body>
-    <form action="" method="post" id="contactForm">
-        <input type="hidden" name="csrfmiddlewaretoken" value="aWPWQiyisETzIka1230845tgECViHmTDoIJ">
-        <input id="id_name" name="name" placeholder="Your Name" type="text">
+<form action="" method="post" id="contactForm">
+    <input type="hidden" name="csrfmiddlewaretoken" value="aWPWQiyisETzIka1230845tgECViHmTDoIJ">
+    <input id="id_name" name="name" placeholder="Your Name" type="text">
 
-        <input id="id_sender" name="sender" placeholder="Your Email" type="text">
+    <input id="id_sender" name="sender" placeholder="Your Email" type="text">
 
-        <select class="selectro" id="id_subject" name="subject" placeholder="Subject" data-selectro-initialized="true" style="display: none;">
-            <option value="General Information">General Information</option>
-            <option value="Labs Help">Labs Help</option>
-            <option value="Game Help">Game Help</option>
-            <option value="Tech Support">Tech Support</option>
-        </select>
+    <select class="selectro" id="id_subject" name="subject" placeholder="Subject" data-selectro-initialized="true"
+            style="display: none;">
+        <option value="General Information">General Information</option>
+        <option value="Labs Help">Labs Help</option>
+        <option value="Game Help">Game Help</option>
+        <option value="Tech Support">Tech Support</option>
+    </select>
 
-        <input type="radio" name="gender" id="gender_m" value="M" />
-        <label for="gender_m">Male</label>
+    <input type="radio" name="gender" id="gender_m" value="M"/>
+    <label for="gender_m">Male</label>
 
-        <input type="radio" name="gender" id="gender_f" value="F" />
-        <label for="gender_f">Female</label>
+    <input type="radio" name="gender" id="gender_f" value="F"/>
+    <label for="gender_f">Female</label>
 
-        <input type="checkbox" name="optin_email" id="optin_email" value="1" />
-        <label for="optin_email">Sign up for email alerts</label>
+    <input type="checkbox" name="optin_email" id="optin_email" value="1"/>
+    <label for="optin_email">Sign up for email alerts</label>
 
-        <input type="checkbox" name="optin_phone" id="optin_phone" value="1" />
-        <label for="optin_phone">Sign up for text alerts</label>
+    <input type="checkbox" name="optin_phone" id="optin_phone" value="1"/>
+    <label for="optin_phone">Sign up for text alerts</label>
 
-        <input type="checkbox" name="optin_rewards" id="optin_rewards" value="1" />
-        <label for="optin_rewards">Sign up for our rewards program</label>
+    <input type="checkbox" name="optin_rewards" id="optin_rewards" value="1"/>
+    <label for="optin_rewards">Sign up for our rewards program</label>
 
-        <input type="checkbox" name="chk_group" value="value1" id="value1" />
-        <label for="value1">Value 1</label>
-        <input type="checkbox" name="chk_group" value="value2" id="value2" />
-        <label for="value2">Value 2</label>
-        <input type="checkbox" name="chk_group" value="value3" id="value3" />
-        <label for="value3">Value 3</label>
-        <input type="checkbox" name="chk_group" value="value4" id="value4" />
-        <label for="value4">Value 4</label>
-        <input type="checkbox" name="chk_group" value="value5" id="value5" />
-        <label for="value5">Value 5</label>
-        <input type="checkbox" name="chk_group" value="value6" id="value6" />
-        <label for="value6">Value 6</label>
+    <input type="checkbox" name="chk_group" value="value1" id="value1"/>
+    <label for="value1">Value 1</label>
+    <input type="checkbox" name="chk_group" value="value2" id="value2"/>
+    <label for="value2">Value 2</label>
+    <input type="checkbox" name="chk_group" value="value3" id="value3"/>
+    <label for="value3">Value 3</label>
+    <input type="checkbox" name="chk_group" value="value4" id="value4"/>
+    <label for="value4">Value 4</label>
+    <input type="checkbox" name="chk_group" value="value5" id="value5"/>
+    <label for="value5">Value 5</label>
+    <input type="checkbox" name="chk_group" value="value6" id="value6"/>
+    <label for="value6">Value 6</label>
 
-        <label for="selector">Single Select</label>
-        <select name="selector" id="selector">
-            <option value="0">Select an option</option>
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
-            <option value="option4">Option 4</option>
-            <option value="option5">Option 5</option>
-        </select>
+    <label for="selector">Single Select</label>
+    <select name="selector" id="selector">
+        <option value="0">Select an option</option>
+        <option value="option1">Option 1</option>
+        <option value="option2">Option 2</option>
+        <option value="option3">Option 3</option>
+        <option value="option4">Option 4</option>
+        <option value="option5">Option 5</option>
+    </select>
 
-        <label for="options_selector">Options</label>
-        <select name="options" id="options_selector" multiple="multiple">
-            <option value="sports">Sports Package</option>
-            <option value="tech" selected="selected">Tech Package</option>
-            <option value="audio">Audio Package</option>
-            <option value="body">Body Package</option>
-            <option value="leather" selected="selected">Leather Seats</option>
-            <option value="moonroof" selected="selected">Moon Roof</option>
-        </select>
+    <label for="options_selector">Options</label>
+    <select name="options" id="options_selector" multiple="multiple">
+        <option value="sports">Sports Package</option>
+        <option value="tech" selected="selected">Tech Package</option>
+        <option value="audio">Audio Package</option>
+        <option value="body">Body Package</option>
+        <option value="leather" selected="selected">Leather Seats</option>
+        <option value="moonroof" selected="selected">Moon Roof</option>
+    </select>
 
-        <textarea name="message"></textarea>
+    <textarea name="message"></textarea>
+    <div class="submitWrap"><input type="submit" value="Submit"></div>
+</form>
+<div id="swipe_target"></div>
+<script type="text/javascript">
+    (function () {
+        'use strict';
 
-        <div class="submitWrap"><input type="submit" value="Submit"></div>
-    </form>
-    <script type="text/javascript">
-        (function(){
-            'use strict';
+        var form = document.querySelector('form'),
+            urlParams = Ω.getUrlParams(),
+            swipe_target = document.querySelector('#swipe_target');
 
-            var form = document.querySelector('form'),
-                urlParams = Vanilla.getUrlParams();
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
 
-            form.addEventListener('submit', function(event){
-                event.preventDefault();
+            console.log(Ω.serializeForm(document.querySelector('form')));
 
-                console.log(Vanilla.serialize(document.querySelector('form')));
+            Ω.modal().
+                    updateHeader('Fuck Yeah!').
+                    updateContent('<h2>Get me out of here!</h2><p>Please god. the portal opened in my living room, and I got sucked in.</p>', true).
+                    show();
+        }, false);
 
-                Vanilla.modal().
-                        updateHeader('Fuck Yeah!').
-                        updateContent('<h2>Get me out of here!</h2><p>Please god. the portal opened in my living room, and I got sucked in.</p>', true).
-                        show();
-            }, false);
+        Ω.swipe(swipe_target, 'left', {
+            callback: function(){
+                console.log('Swiped Left');
+            }
+        });
 
-            console.log(urlParams);
-        })();
-    </script>
+        Ω.swipe(swipe_target, 'right', {
+            callback: function(){
+                console.log('Swiped Right');
+            }
+        });
+
+        Ω.swipe(swipe_target, 'up', {
+            callback: function(){
+                console.log('Swiped Up');
+            }
+        });
+
+        Ω.swipe(swipe_target, 'down', {
+            callback: function(){
+                console.log('Swiped Down');
+            }
+        });
+
+        console.log(urlParams);
+    })();
+</script>
 </body>
 </html>
