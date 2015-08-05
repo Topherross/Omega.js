@@ -50,11 +50,11 @@ To use Omega.js reference it in your javascript with `Omega`, or the Omega symbo
 | | `bubbles`: `Boolean` | Y | NA | NA | Boolean for function bubbling. | `true|false` |
 | `Ω.stop(event)` | `event`: `Event` | N | NA | `false` | The event on which to stop propagation. | `Event` |
 | `Ω.swipe(el, direction, options)` | `el`: `Element` | N | NA | `false` | The HTML target element. | `document.querySelector('#header');` |
-| | `direction`: `Boolean` | N | NA | NA | The direction of the swipe to listen for. | `'up'|'down'|'left'|'right'` |
-| | `options`: `Boolean` | Y | NA | NA | Boolean for function bubbling. | `true|false` |
+| | `direction`: `String` | N | NA | NA | The direction of the swipe to listen for. | `'up'|'down'|'left'|'right'` |
+| | `options`: `Object` | Y | NA | NA | Boolean for function bubbling. | `true|false` |
 | | `{` | | | | | |
-| | `threshold`: `Boolean` | Y | 60 | NA | A number representing the length of the swipe, in pixels, to trigger the callback. | `30` |
-| | `restraint`: `Boolean` | Y | 100 | NA | A number representing wiggle room, in pixels, allowed on the perpendicular plane. | `70` |
-| | `allowed_time`: `Boolean` | Y | 600 | NA | A number representing the length of time of the swipe, in milliseconds, to trigger the callback. | `300` |
-| | `callback`: `Boolean` | Y | NA | `function(){}` | The function to invoke if the direction, and conditions for swipe are met. | `function(){ // DO STUFF HERE }` |
+| | `threshold`: `Number` | Y | 60 | NA | A number representing the length of the swipe, in pixels, to trigger the callback. | `30` |
+| | `restraint`: `Number` | Y | 100 | NA | A number representing wiggle room, in pixels, allowed on the perpendicular plane. | `70` |
+| | `allowed_time`: `Number` | Y | 600 | NA | A number representing the length of time of the swipe, in milliseconds, to trigger the callback. | `300` |
+| | `callback`: `Function` | Y | NA | `function(){}` | The function to invoke if the direction, and conditions for swipe are met. | `function(){ // DO STUFF HERE }` |
 | | `{` | | | | | |
