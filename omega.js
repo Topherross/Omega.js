@@ -204,7 +204,7 @@
 
     /**
      *
-     * @param {HTMLElement} el
+     * @param {HTMLElement|Element} el
      * @param {String} event
      * @param {Function} func
      * @param {boolean} [bubbles]
