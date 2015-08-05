@@ -25,18 +25,18 @@ To use Omega.js reference it in your javascript with `Omega`, or the Omega symbo
 
 | Method | Parameters | Optional | Default | Return | Description | Examples |
 | -- | -- | -- | -- | -- | -- | -- |
-| `Ω.ready(callback)` | `callback`: `Function` | N | NA | | The function to call when the DOM ready state is complete. | `function(){ //Do Stuff. }`, or pass by reference `myFunction`. |
-| `Ω.createEl(el, attributes, text, html)` | `type`: `String` | N | NA | | A string of the element type to create. | `'div'`, `'span'`, `'a'`, `'p'`... | 
-| | `attributes`: `Object` | Y | NA | | An object containing HTML element attributes to apply to the newly created element. | `{'class': 'blue-button disabled', 'title': 'Submit'}` |
-| | `text`: `String` | Y | NA | | A string of text to be inserted into the newly created element. | `'Hello Omega!'` |
-| | `html`: `Boolean` | Y | `false` | | Requires `text` to be set. Renders `text` as HTML content | `'<h1 id="header">Hello Omega!</h1>'` |
-| `Ω.setAttributes(el, attributes)` | `el`: `Element` | N | NA | | The HTML target element. | `document.querySelector('#header');` | 
+| `Ω.ready(callback)` | `callback`: `Function` | N | NA | `false` | The function to call when the DOM ready state is complete. | `function(){ //Do Stuff. }`, or pass by reference `myFunction`. |
+| `Ω.createEl(el, attributes, text, html)` | `type`: `String` | N | NA | `HTMLElement` | A string of the element type to create. | `'div'`, `'span'`, `'a'`, `'p'`... | 
+| | `attributes`: `Object` | Y | NA | `false` | An object containing HTML element attributes to apply to the newly created element. | `{'class': 'blue-button disabled', 'title': 'Submit'}` |
+| | `text`: `String` | Y | NA | `false` | A string of text to be inserted into the newly created element. | `'Hello Omega!'` |
+| | `html`: `Boolean` | Y | `false` | `false` | Requires `text` to be set. Renders `text` as HTML content | `'<h1 id="header">Hello Omega!</h1>'` |
+| `Ω.setAttributes(el, attributes)` | `el`: `Element` | N | NA | `false` | The HTML target element. | `document.querySelector('#header');` | 
 | | `attributes`: `Object` | N | NA | | An object containing HTML element attributes to apply to the `el`. | `{'class': 'blue-button disabled', 'title': 'Submit'}` |
-| `Ω.hasClass(el, klass)` | `el`: `Element` | N | NA | | The HTML target element. | `document.querySelector('#header');` | 
-| | `klass`: `String` | N | NA | | The class to check for on the `el`. | `'selected'` |
-| `Ω.removeClass(el, klass)` | | `el`: `Element` | N | NA | | The HTML target element. | `document.querySelector('#header');` | 
-| | `klass`: `String` | N | NA | | The class to remove from the `el`. | `'selected'` |
+| `Ω.hasClass(el, klass)` | `el`: `Element` | N | NA | `false` | The HTML target element. | `document.querySelector('#header');` | 
+| | `klass`: `String` | N | NA | `false` | The class to check for on the `el`. | `'selected'` |
+| `Ω.removeClass(el, klass)` | | `el`: `Element` | N | NA | `false` | The HTML target element. | `document.querySelector('#header');` | 
+| | `klass`: `String` | N | NA | `false` | The class to remove from the `el`. | `'selected'` |
 | `Ω.addClass(el, klass)` | `el`: `Element` | N | NA | | The HTML target element. | `document.querySelector('#header');` | 
-| | `klass`: `String` | N | NA | | The class to remove to the `el`. | `'selected'` |
-| `Ω.toggleClass(el, klass)` | `el`: `Element` | N | NA | | The HTML target element. | `document.querySelector('#header');` | 
-| | `klass`: `String` | N | NA | | The class to add, or remove from the `el`. | `'selected'` |
+| | `klass`: `String` | N | NA | `false` | The class to remove to the `el`. | `'selected'` |
+| `Ω.toggleClass(el, klass)` | `el`: `Element` | N | NA | `false` | The HTML target element. | `document.querySelector('#header');` | 
+| | `klass`: `String` | N | NA | `false` | The class to add, or remove from the `el`. | `'selected'` |

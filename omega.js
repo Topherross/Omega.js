@@ -193,18 +193,10 @@
      * @returns {boolean}
      */
     Omega.event = function (el, event, func, bubbles) {
-        var _bubbles = (typeof bubbles !== "undefined" && (!!bubbles || !bubbles)) ? bubbles : false;
-
         if (document.addEventListener) {
-            el.addEventListener(event, function (event) {
-                func(event);
-            }, _bubbles);
+            el.addEventListener(event, func, (typeof bubbles !== "undefined" && typeof bubbles === "boolean") ? bubbles : false);
         } else if (document.attachEvent) {
-            el.attachEvent("on" + event, function (event) {
-                func(event);
-            });
-        } else {
-            el["on" + event] = null;
+            el.attachEvent("on" + event, func);
         }
 
         return false;
@@ -219,18 +211,10 @@
      * @returns {boolean}
      */
     Omega.remove = function (el, event, func, bubbles) {
-        var _bubbles = (typeof bubbles !== "undefined" && (!!bubbles || !bubbles)) ? bubbles : false;
-
         if (document.removeEventListener) {
-            el.removeEventListener(event, function (event) {
-                func(event);
-            }, _bubbles);
+            el.removeEventListener(event, func, (typeof bubbles !== "undefined" && typeof bubbles === "boolean") ? bubbles : false);
         } else if (document.detachEvent) {
-            el.detachEvent("on" + event, function (event) {
-                func(event);
-            });
-        } else {
-            el["on" + event] = null;
+            el.detachEvent("on" + event, func);
         }
 
         return false;
