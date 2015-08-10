@@ -113,7 +113,7 @@
 </head>
 <body>
 <form action="" method="post" id="contactForm">
-    <input type="hidden" name="csrfmiddlewaretoken" value="aWPWQiyisETzIka1230845tgECViHmTDoIJ">
+    <input type="hidden" name="token" value="aWPWduytrewzIka1230845tgECViHmTDoIJ">
     <input id="id_name" name="name" placeholder="Your Name" type="text">
 
     <input id="id_sender" name="sender" placeholder="Your Email" type="text">
@@ -183,39 +183,39 @@
         'use strict';
 
         var form = document.querySelector('form'),
-            urlParams = Ω.getUrlParams(),
+            urlParams = o.getUrlParams(),
             swipe_target = document.querySelector('#swipe_target');
 
         form.addEventListener('submit', function (event) {
             event.preventDefault();
 
-            console.log(Ω.serializeForm(document.querySelector('form')));
+            console.log(o.serializeForm(document.querySelector('form')));
 
-            Ω.modal().
+            o.modal().
                     updateHeader('Fuck Yeah!').
-                    updateContent('<h2>Get me out of here!</h2><p>Please god. the portal opened in my living room, and I got sucked in.</p>', true).
+                    updateContent('<h2>Get me out of here!</h2><p>Please god. A portal opened in my living room, and I got sucked in.</p>', true).
                     show();
         }, false);
 
-        Ω.swipe(swipe_target, 'left', {
+        o.swipe(swipe_target, 'left', {
             callback: function(){
                 console.log('Swiped Left');
             }
         });
 
-        Ω.swipe(swipe_target, 'right', {
+        o.swipe(swipe_target, 'right', {
             callback: function(){
                 console.log('Swiped Right');
             }
         });
 
-        Ω.swipe(swipe_target, 'up', {
+        o.swipe(swipe_target, 'up', {
             callback: function(){
                 console.log('Swiped Up');
             }
         });
 
-        Ω.swipe(swipe_target, 'down', {
+        o.swipe(swipe_target, 'down', {
             callback: function(){
                 console.log('Swiped Down');
             }

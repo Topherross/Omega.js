@@ -48,12 +48,12 @@
     Omega.createEl = function (type, attributes, text, html) {
         var el = document.createElement(type);
 
-        if (typeof attributes !== "undefined") {
+        if (undefined !== attributes) {
             Omega.setAttributes(el, attributes);
         }
 
-        if (typeof text !== "undefined") {
-            if (typeof html !== "undefined" && !!html) {
+        if (undefined !==  text) {
+            if (undefined !== html && !!html) {
                 Omega.setText(el, text, true);
             } else {
                 Omega.setText(el, text);
@@ -70,7 +70,8 @@
      * @returns {boolean} false
      */
     Omega.setAttributes = function (el, attributes) {
-        for (var attr in attributes) {
+        var attr;
+        for (attr in attributes) {
             if (Object.prototype.hasOwnProperty.call(attributes, attr)) {
                 el.setAttribute(attr, attributes[attr]);
             }
@@ -90,12 +91,11 @@
             return false;
         }
 
-        var class_list = el.getAttribute('class').split(' ');
+        var class_list = el.getAttribute('class').split(' '), c;
 
-        if (typeof class_list !== "undefined" &&
-            class_list.length > 0) {
-            for (var c = 0; c < class_list.length; c++) {
-                if (class_list[c] == klass) {
+        if ("undefined" !== class_list && 0 < class_list.length) {
+            for (c = 0; c < class_list.length; c++) {
+                if (class_list[c] === klass) {
                     return true;
                 }
             }
@@ -115,11 +115,11 @@
             return false;
         }
 
-        var class_list = el.getAttribute('class').split(' ');
+        var class_list = el.getAttribute('class').split(' '), c;
 
         if (class_list.length > 0) {
-            for (var c = 0; c < class_list.length; c++) {
-                if (class_list[c] == klass) {
+            for (c = 0; c < class_list.length; c++) {
+                if (class_list[c] === klass) {
                     class_list.splice(c, 1);
                     el.setAttribute('class', class_list.join(' '));
                     break;
@@ -170,13 +170,14 @@
      * @returns {boolean}
      */
     Omega.batchRemoveClass = function (objs, klass) {
-        if (objs.length == 0) {
+        if (objs.length === 0) {
             return false;
         }
 
-        for (var obj = 0; obj < objs.length; obj++) {
-            if (objs[obj].hasAttribute('class') &&
-                Omega.hasClass(objs[obj], klass)) {
+        var obj;
+
+        for (obj = 0; obj < objs.length; obj++) {
+            if (objs[obj].hasAttribute('class') && Omega.hasClass(objs[obj], klass)) {
                 Omega.removeClass(objs[obj], klass);
             }
         }
@@ -194,7 +195,7 @@
      */
     Omega.event = function (el, event, func, bubbles) {
         if (document.addEventListener) {
-            el.addEventListener(event, func, (typeof bubbles !== "undefined" && typeof bubbles === "boolean") ? bubbles : false);
+            el.addEventListener(event, func, (undefined !== bubbles && typeof bubbles === "boolean") ? bubbles : false);
         } else if (document.attachEvent) {
             el.attachEvent("on" + event, func);
         }
@@ -212,7 +213,7 @@
      */
     Omega.remove = function (el, event, func, bubbles) {
         if (document.removeEventListener) {
-            el.removeEventListener(event, func, (typeof bubbles !== "undefined" && typeof bubbles === "boolean") ? bubbles : false);
+            el.removeEventListener(event, func, (undefined !== bubbles && typeof bubbles === "boolean") ? bubbles : false);
         } else if (document.detachEvent) {
             el.detachEvent("on" + event, func);
         }
@@ -248,7 +249,7 @@
      * @returns {boolean}
      */
     Omega.swipe = function (el, direction, options) {
-        if (typeof el === "undefined" || typeof direction === "undefined") {
+        if (undefined === el || undefined === direction) {
             return false;
         }
 
@@ -265,7 +266,7 @@
             threshold: options.threshold || 60,
             restraint: options.restraint || 100,
             allowed_time: options.allowed_time || 600,
-            callback: options.callback || function () {}
+            callback: options.callback || null
         };
 
         Omega.event($el, 'touchstart', function (event) {
@@ -291,16 +292,15 @@
 
             if (elapsed_time <= $options.allowed_time) {
                 if (Math.abs(dist_x) >= $options.threshold && Math.abs(dist_y) <= $options.restraint) {
-                    if (dist_x < 0 && direction == 'left') {
+                    if (dist_x < 0 && direction === 'left' && $options.callback !== null) {
                         $options.callback();
-                    } else if (dist_x > 0 && direction == 'right') {
+                    } else if (dist_x > 0 && direction === 'right' && $options.callback !== null) {
                         $options.callback();
                     }
-                }
-                else if (Math.abs(dist_y) >= $options.threshold && Math.abs(dist_x) <= $options.restraint) {
-                    if (dist_y < 0 && direction == 'up') {
+                } else if (Math.abs(dist_y) >= $options.threshold && Math.abs(dist_x) <= $options.restraint) {
+                    if (dist_y < 0 && direction === 'up' && $options.callback !== null) {
                         $options.callback();
-                    } else if (dist_y > 0 && direction == 'down') {
+                    } else if (dist_y > 0 && direction === 'down' && $options.callback !== null) {
                         $options.callback();
                     }
                 }
@@ -320,7 +320,7 @@
      * @returns {boolean}
      */
     Omega.setText = function (el, text, html) {
-        if (typeof html !== "undefined" && !!html) {
+        if (undefined !== html && !!html) {
             el.innerHTML = text;
         } else if (document.all) {
             el.innerText = text;
@@ -346,14 +346,17 @@
      */
     Omega.getUrlParams = function () {
         var params = {},
-            search = window.location.search;
+            search = window.location.search,
+            param_array,
+            $params,
+            i;
 
         if (!!(/^\?/.test(search))) {
-            var param_array = search.split('?')[1].split('&');
+            param_array = search.split('?')[1].split('&');
 
-            for (var i = 0; i < param_array.length; i++) {
-                var _params = param_array[i].split('=');
-                params[_params[0]] = _params[1];
+            for (i = 0; i < param_array.length; i++) {
+                $params = param_array[i].split('=');
+                params[$params[0]] = $params[1];
             }
         }
 
@@ -366,9 +369,10 @@
      * @returns {string}
      */
     Omega.stringifyUrlParams = function (obj) {
-        var params = [];
+        var params = [],
+            key;
 
-        for (var key in obj) {
+        for (key in obj) {
             if (Object.prototype.hasOwnProperty.call(obj, key) && key !== 'length') {
                 params.push(encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]));
             }
@@ -391,7 +395,7 @@
 
         if (window.history.pushState) {
             window.history.pushState({}, "", window.location.pathname + '?' + Omega.stringifyUrlParams(params));
-        } else if (typeof allow_reload !== "undefined" && !!allow_reload) {
+        } else if (undefined !== allow_reload && !!allow_reload) {
             window.location.search = Omega.stringifyUrlParams(params);
         }
 
@@ -418,7 +422,7 @@
             window.history.pushState({}, "", window.location.pathname);
         } else if (window.history.pushState && param_string !== "") {
             window.history.pushState({}, "", window.location.pathname + '?' + param_string);
-        } else if (typeof allow_reload !== "undefined" && !!allow_reload) {
+        } else if (undefined !== allow_reload && !!allow_reload) {
             window.location.search = param_string;
         }
 
@@ -438,7 +442,7 @@
         }
 
         $modal = {};
-        options = (typeof options === "undefined") ? {} : options;
+        options = (undefined === options) ? {} : options;
 
         var configs = {
                 show_callback: options.show_callback || false,
@@ -465,7 +469,7 @@
          * @returns {Object} $modal
          */
         $modal.updateHeader = function (text, html) {
-            if (typeof html !== "undefined" && !!html) {
+            if (undefined !== html && !!html) {
                 Omega.setText(modal_header, text, html);
             } else {
                 Omega.setText(modal_header, text);
@@ -481,7 +485,7 @@
          * @returns {Object} $modal
          */
         $modal.updateContent = function (text, html) {
-            if (typeof html !== "undefined" && !!html) {
+            if (undefined !== html && !!html) {
                 Omega.setText(modal_content, text, html);
             } else {
                 Omega.setText(modal_content, text);
@@ -514,7 +518,7 @@
                 $modal.added_to_DOM = true;
             }
 
-            Object(modal_wrap).style.display = "block";
+            modal_wrap.style.display = "block";
             $modal.visible = true;
 
             if (typeof callback === "function") {
@@ -533,7 +537,7 @@
          */
         $modal.hide = function (callback) {
             if (!!$modal.added_to_DOM) {
-                Object(modal_wrap).style.display = "none";
+                modal_wrap.style.display = "none";
                 $modal.visible = false;
             }
 
@@ -569,10 +573,10 @@
             Omega.stop(event);
         }, false);
 
-        Omega.event(window, 'keyup', function(event){
+        Omega.event(window, 'keyup', function (event) {
             var key = event.which || event.keyCode;
 
-            if (key == 27) {
+            if (key === 27) {
                 $modal.hide();
             }
         }, false);
@@ -590,7 +594,7 @@
      * @returns {Boolean|XMLHttpRequest}
      */
     Omega.ajax = function (action, configs) {
-        if (typeof action === "undefined" || action === null || !action) {
+        if (undefined === action || action === null || !action) {
             return false;
         }
 
@@ -606,7 +610,8 @@
                 json: configs.json || false,
                 user: configs.user || false,
                 pass: configs.pass || false
-            };
+            },
+            request;
 
         if (!methods.test(options.method)) {
             options.method = "GET";
@@ -616,11 +621,11 @@
             options.beforeSend();
         }
 
-        var request = new XMLHttpRequest();
+        request = new window.XMLHttpRequest();
 
         request.onreadystatechange = function () {
-            if (request.readyState == 4) {
-                if (request.status == 200) {
+            if (request.readyState === 4) {
+                if (request.status === 200) {
                     if (typeof options.onSuccess === "function") {
                         options.onSuccess(request);
                     }
@@ -650,7 +655,7 @@
             request.setRequestHeader('Content-Type', 'application/json');
         }
 
-        if (options.method == "POST" && !options.json) {
+        if (options.method.toLowerCase() === "post" && !options.json) {
             request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
         }
 
@@ -669,29 +674,26 @@
             return false;
         }
 
-        var data = [];
+        var data = [], i, selection, type;
 
-        for (var i = 0; i < form.elements.length; i++) {
-            var type = form.elements[i].type.toLowerCase();
+        for (i = 0; i < form.elements.length; i++) {
+            type = form.elements[i].type.toLowerCase();
 
-            if (typeof form.elements[i].type === "undefined" ||
-                (type === "submit" || type === "reset" || type === "button")) {
-                continue;
-            }
-
-            if ((type === "radio" || type === "checkbox")) {
-                if (!form.elements[i].checked) {
-                    continue;
-                }
-                data.push((form.elements[i].name + '=' + encodeURIComponent(form.elements[i].value)));
-            } else if (type === "select-multiple") {
-                for (var selection = 0; selection < form.elements[i].children.length; selection++) {
-                    if (form.elements[i].children[selection].selected) {
-                        data.push((form.elements[i].name + '=' + encodeURIComponent(form.elements[i].children[selection].value)));
+            if (undefined !== form.elements[i].type || (type !== "submit" || type !== "reset" || type !== "button")) {
+                if ((type === "radio" || type === "checkbox")) {
+                    if (!form.elements[i].checked) {
+                        continue;
                     }
+                    data.push((form.elements[i].name + '=' + encodeURIComponent(form.elements[i].value)));
+                } else if (type === "select-multiple") {
+                    for (selection = 0; selection < form.elements[i].children.length; selection++) {
+                        if (form.elements[i].children[selection].selected) {
+                            data.push((form.elements[i].name + '=' + encodeURIComponent(form.elements[i].children[selection].value)));
+                        }
+                    }
+                } else {
+                    data.push((form.elements[i].name + '=' + encodeURIComponent(form.elements[i].value)));
                 }
-            } else {
-                data.push((form.elements[i].name + '=' + encodeURIComponent(form.elements[i].value)));
             }
         }
         return data.join('&');
@@ -700,6 +702,6 @@
     if (typeof module === "object" && typeof module.exports === "object") {
         module.exports = Omega;
     } else {
-        window.Omega = window.Ω = Omega;
+        window.Omega = window.o = Omega;
     }
 })(window, document);
