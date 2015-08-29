@@ -702,6 +702,6 @@
     if (typeof module === "object" && typeof module.exports === "object") {
         module.exports = Omega;
     } else {
-        window.Omega = window.o = Omega;
+        window.Omega = Omega;
     }
-})(window, document);
+}(window, document));
