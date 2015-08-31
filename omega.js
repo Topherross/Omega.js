@@ -11,22 +11,29 @@
     /**
      *
      * @param {Function} callback
+     * @param {Element} [iframe]
      * @returns {boolean} false
      */
-    Omega.ready = function (callback) {
+    Omega.ready = function (callback, iframe) {
+        var target = document;
+
+        if (undefined !== iframe && iframe.nodeName.toLowerCase() === 'iframe') {
+            target = iframe;
+        }
+
         if (typeof callback === "function") {
-            if (document.readyState === "complete") {
+            if (target.readyState === "complete") {
                 callback();
             } else {
-                if (document.addEventListener) {
+                if (target.addEventListener) {
                     try {
-                        document.addEventListener("DOMContentLoaded", callback, false);
+                        target.addEventListener("DOMContentLoaded", callback, false);
                     } catch (e) {
-                        window.addEventListener("load", callback, false);
+                        target.addEventListener("load", callback, false);
                     }
-                } else if (document.attachEvent) {
+                } else if (target.attachEvent) {
                     try {
-                        document.attachEvent("onreadystatechange", callback);
+                        target.attachEvent("onreadystatechange", callback);
                     } catch (e) {
                         window.attachEvent("onload", callback);
                     }
