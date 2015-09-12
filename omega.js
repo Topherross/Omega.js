@@ -59,7 +59,7 @@
             Omega.setAttributes(el, attributes);
         }
 
-        if (undefined !==  text) {
+        if (undefined !== text) {
             if (undefined !== html && !!html) {
                 Omega.setText(el, text, true);
             } else {
@@ -345,6 +345,21 @@
      */
     Omega.getText = function (el) {
         return (document.all) ? el.innerText : el.textContent;
+    };
+
+    /**
+     *
+     * @param {string} string
+     * @returns {string}
+     */
+    Omega.toCapFirst = function (string) {
+        var str_array = string.split(' '), i;
+
+        for (i = 0; i < str_array.length; i += 1) {
+            str_array[i] = str_array[i].charAt(0).toUpperCase() + str_array[i].slice(1);
+        }
+
+        return str_array.join(' ');
     };
 
     /**
